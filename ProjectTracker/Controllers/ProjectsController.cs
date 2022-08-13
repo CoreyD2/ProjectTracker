@@ -27,6 +27,22 @@ namespace ProjectTracker.Controllers
                           Problem("Entity set 'ApplicationDbContext.Project'  is null.");
         }
 
+        // GET: Projects/ShowSearchForm
+        public async Task<IActionResult> ShowSearchForm()
+        {
+            return _context.Project != null ?
+                        View() :
+                        Problem("Entity set 'ApplicationDbContext.Project'  is null.");
+        }
+
+        // Post: Projects/ShowSearchResults
+        public async Task<IActionResult> ShowSearchResults(string SearchPhrase)
+        {
+            return _context.Project != null ?
+                        View("Index",await _context.Project.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Project'  is null.");
+        }
+
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -56,7 +72,7 @@ namespace ProjectTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Priority")] Project project)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Priority,Status")] Project project)
         {
             if (ModelState.IsValid)
             {
