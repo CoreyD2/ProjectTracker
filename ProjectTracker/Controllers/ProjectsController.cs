@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +40,7 @@ namespace ProjectTracker.Controllers
         public async Task<IActionResult> ShowSearchResults(string SearchPhrase)
         {
             return _context.Project != null ?
-                        View("Index",await _context.Project.ToListAsync()) :
+                        View("Index",await _context.Project.Where(p => p.Name.Contains(SearchPhrase) || p.Description.Contains(SearchPhrase)).ToListAsync()) :
                         Problem("Entity set 'ApplicationDbContext.Project'  is null.");
         }
 
@@ -62,6 +63,7 @@ namespace ProjectTracker.Controllers
         }
 
         // GET: Projects/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -70,6 +72,7 @@ namespace ProjectTracker.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Priority,Status")] Project project)
@@ -84,6 +87,7 @@ namespace ProjectTracker.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Project == null)
@@ -102,6 +106,7 @@ namespace ProjectTracker.Controllers
         // POST: Projects/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Priority")] Project project)
@@ -135,6 +140,7 @@ namespace ProjectTracker.Controllers
         }
 
         // GET: Projects/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Project == null)
@@ -153,6 +159,7 @@ namespace ProjectTracker.Controllers
         }
 
         // POST: Projects/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
