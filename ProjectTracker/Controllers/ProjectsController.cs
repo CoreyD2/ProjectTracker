@@ -109,7 +109,7 @@ namespace ProjectTracker.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Priority")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Priority,Status")] Project project)
         {
             if (id != project.Id)
             {
